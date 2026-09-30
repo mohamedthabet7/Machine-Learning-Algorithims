@@ -1,6 +1,20 @@
+import sys
 import pandas as pd
 import numpy as np
-from tree_gui import show_tree
+
+# Ensure UTF-8 output encoding for tree symbols on Windows consoles
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
+try:
+    from tree_gui import show_tree
+except ImportError:
+    show_tree = None
+
+
 
 
 def ent(column):
@@ -68,17 +82,17 @@ def print_tree(tree, indent=""):
     for i, (value, child) in enumerate(items):
 
         if i == len(items) - 1:
-            branch = "└── "
+            branch = "`-- "
             next_indent = indent + "    "
         else:
-            branch = "├── "
-            next_indent = indent + "│   "
+            branch = "|-- "
+            next_indent = indent + "|   "
 
         if isinstance(child, dict):
             print(indent + branch + str(value))
             print_tree(child, next_indent)
         else:
-            print(indent + branch + str(value) + " → " + str(child))
+            print(indent + branch + str(value) + " -> " + str(child))
 
 #Create Data List
 data = {
